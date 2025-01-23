@@ -1,6 +1,6 @@
 package com.nurace11.bookapp.ui;
 
-import com.nurace11.bookapp.ui.view.author.AuthorView;
+import com.nurace11.bookapp.ui.view.author.AuthorsView;
 import com.nurace11.bookapp.ui.view.book.BooksView;
 import com.nurace11.bookapp.ui.view.landing.LandingView;
 import com.vaadin.flow.component.applayout.AppLayout;
@@ -33,8 +33,8 @@ public class MainLayout extends AppLayout {
 
     private void createDrawer() {
         addToDrawer(new VerticalLayout(
-                new RouterLink("Books", BooksView.class),
-                new RouterLink("Authors", AuthorView.class)
+                new RouterLink("Книги", BooksView.class),
+                new RouterLink("Авторы", AuthorsView.class)
         ));
     }
 }

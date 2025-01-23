@@ -6,6 +6,8 @@ import com.nurace11.bookapp.service.AuthorService;
 import com.nurace11.bookapp.service.BookService;
 import com.nurace11.bookapp.service.LibraryService;
 import com.nurace11.bookapp.ui.MainLayout;
+import com.nurace11.bookapp.ui.view.author.AuthorView;
+import com.nurace11.bookapp.ui.view.author.AuthorsView;
 import com.nurace11.bookapp.ui.view.util.RowData;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
@@ -19,6 +21,7 @@ import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.router.BeforeEvent;
 import com.vaadin.flow.router.HasUrlParameter;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.router.RouterLink;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
@@ -83,9 +86,11 @@ public class BookView extends VerticalLayout implements HasUrlParameter<String> 
         HorizontalLayout horizontalLayout = new HorizontalLayout(JustifyContentMode.BETWEEN, new Text("Авторы книги"), addAuthorButton);
         horizontalLayout.setWidthFull();
         add(horizontalLayout);
-
         authorGrid = new Grid<>();
-        authorGrid.addColumn(AuthorModel::getId).setHeader("ID");
+        authorGrid.addColumn(new ComponentRenderer<>(RouterLink::new, (router, author) -> {
+            router.setText(author.getId());
+            router.setRoute(AuthorView.class, author.getId());
+        })).setHeader("ID");
         authorGrid.addColumn(AuthorModel::getFirstName).setHeader("Имя");
         authorGrid.addColumn(AuthorModel::getLastName).setHeader("Фамилия");
         authorGrid.setEmptyStateText("Авторы не найдены");
@@ -154,9 +159,9 @@ public class BookView extends VerticalLayout implements HasUrlParameter<String> 
                                 addAuthorDialog.close();
                                 setOfCheckedAuthors.forEach(authorId -> {
                                             if (bookAuthors.stream().filter(bookAuthor -> bookAuthor.getId().equals(authorId)).findFirst().isEmpty()) {
-                                                libraryService.addAuthorToBook(bookId, authorId).subscribe(author ->
-                                                        log.info("author {} successfully added to {} book", author.getId(), bookId)
-                                                );
+                                                libraryService.addAuthorToBook(bookId, authorId).subscribe(author -> {
+                                                    log.info("author {} successfully added to {} book", author.getId(), bookId);
+                                                });
                                             } else {
                                                 log.warn("Found duplicate {}", authorId);
                                             }
@@ -168,6 +173,10 @@ public class BookView extends VerticalLayout implements HasUrlParameter<String> 
                     }
                 }
         );
+    }
+
+    private void loadBook(String bookId) {
+        bookService.getBook(bookId).subscribe(b -> this.book = b);
     }
 
     private void refreshAuthorsGrid() {

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 
@@ -37,5 +38,9 @@ public class BookService {
 
     public Mono<Void> deleteBookById(String id) {
         return bookRepository.deleteById(id);
+    }
+
+    public Flux<BookModel> getBooksInRange(LocalDate from, LocalDate to) {
+        return bookRepository.findBooksInPublishDateRange(from, to).map(bookMapper::toModel); // todo: test map()
     }
 }

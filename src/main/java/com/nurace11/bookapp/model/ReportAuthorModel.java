@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ReportAuthorModel {
+    private String authorId;
     private String firstName;
     private String lastName;
     private LocalDateTime createdDate;

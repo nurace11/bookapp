@@ -92,16 +92,14 @@ public class AuthorsView extends VerticalLayout {
         add(addBookButton);
     }
 
-
-
     private void initContent() {
         grid = new Grid<>(AuthorModel.class, false);
         grid.addColumn(new ComponentRenderer<>(RouterLink::new, (router, author) -> {
             router.setText(author.getId());
             router.setRoute(AuthorView.class, author.getId());
         })).setHeader("Id");
-        grid.addColumn(AuthorModel::getFirstName).setHeader("Название книги");
-        grid.addColumn(AuthorModel::getLastName).setHeader("Дата публикации");
+        grid.addColumn(AuthorModel::getFirstName).setHeader("Имя");
+        grid.addColumn(AuthorModel::getLastName).setHeader("Фамиоия");
         grid.addColumn(AuthorModel::getCreatedDate).setHeader("Дата создания записи");
         grid.setEmptyStateText("Авторы не найдены");
         grid.setItems(authors);

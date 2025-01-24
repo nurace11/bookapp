@@ -1,5 +1,6 @@
 package com.nurace11.bookapp.service;
 
+import com.nurace11.bookapp.document.AuthorDocument;
 import com.nurace11.bookapp.mapper.AuthorBookMapper;
 import com.nurace11.bookapp.model.AuthorModel;
 import com.nurace11.bookapp.model.IdModel;
@@ -8,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
@@ -25,7 +28,9 @@ public class AuthorService {
     }
 
     public Mono<IdModel> createAuthor(AuthorModel model) {
-        return authorRepository.save(authorMapper.toDocument(model))
+        AuthorDocument document = authorMapper.toDocument(model);
+        document.setCreatedDate(LocalDateTime.now());
+        return authorRepository.save(document)
                 .map(author -> new IdModel(author.getId()));
     }
 

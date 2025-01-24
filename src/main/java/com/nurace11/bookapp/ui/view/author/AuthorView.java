@@ -74,12 +74,14 @@ public class AuthorView extends VerticalLayout implements HasUrlParameter<String
 
         allBooksGrid = new Grid<>();
         allBooksGrid.addColumn(new ComponentRenderer<>(Checkbox::new, (checkbox, book) -> {
-            if (Boolean.TRUE.equals(checkbox.getValue())) {
-                selectedBookIds.add(book.getId());
-            } else {
-                selectedBookIds.remove(book.getId());
-            }
-        }));
+            checkbox.addValueChangeListener(e -> {
+                if (Boolean.TRUE.equals(e.getValue())) {
+                    selectedBookIds.add(book.getId());
+                } else {
+                    selectedBookIds.remove(book.getId());
+                }
+            });
+        })).setHeader("");
         allBooksGrid.addColumn(new ComponentRenderer<>(RouterLink::new, (router, book) -> {
             router.setText(book.getId());
             router.setRoute(BookView.class, book.getId());
@@ -123,7 +125,6 @@ public class AuthorView extends VerticalLayout implements HasUrlParameter<String
     private void addBooks() {
         for (String bookId : selectedBookIds) {
             libraryService.addBookToAuthor(author.getId(), bookId).subscribe(v -> {
-                // todo fix
                 loadAuthor(author.getId());
             });
         }

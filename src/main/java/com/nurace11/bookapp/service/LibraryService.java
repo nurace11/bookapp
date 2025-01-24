@@ -10,6 +10,7 @@ import com.nurace11.bookapp.repository.BookRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
+import reactor.util.function.Tuple2;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -68,7 +69,22 @@ public class LibraryService {
                 .map(tuple -> tuple.getT1());
     }
 
+//    public Mono<BookDocument> addAuthorToBook(String bookId, String authorId) {
+//        System.out.println("addAuthorToBook book: %s author: %s".formatted(bookId, authorId));
+//
+//        return bookRepository.findById(bookId)
+//                .flatMap(book -> authorRepository.findById(authorId)
+//                        .flatMap(author -> {
+//                            book.getAuthorIds().add(authorId);
+//                            author.getBookIds().add(bookId);
+//                            return Mono.zip(bookRepository.save(book), authorRepository.save(author));
+//                        }))
+//                .map(tuple -> tuple.getT1());
+//    }
+
     public Mono<BookDocument> addAuthorToBook(String bookId, String authorId) {
+//        System.out.println("addAuthorToBook book: %s author: %s".formatted(bookId, authorId));
+
         return bookRepository.findById(bookId)
                 .flatMap(book -> authorRepository.findById(authorId)
                         .flatMap(author -> {
